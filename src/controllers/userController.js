@@ -28,6 +28,22 @@ const findOneUser = async (req, res, next) => {
   }
 };
 
+const findUserByEmail = async (req, res, next) => {
+  try{
+    const { params : { email } } = req;
+    console.log(email)
+    const data = await UserService.findByEmail(email);
+
+    res.status(200).json({
+      message: 'OK',
+      data,
+    });
+  }catch (error) {
+    console.log(error.message)
+    next(error)
+  }
+}
+
 const createUser = async (req, res, next) => {
   try {
     const { body } = req
@@ -75,6 +91,7 @@ const deleteUser = async (req, res, next) => {
 module.exports = {
   findAllUsers,
   findOneUser,
+  findUserByEmail,
   createUser,
   updateUser,
   deleteUser
