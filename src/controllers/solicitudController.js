@@ -32,7 +32,7 @@ const createSolicitud = async (req, res, next) => {
     const { body } = req
     
     const data = await SolicitudService.create(body)
-    
+
     res.status(201).json({
       message: 'Created',
       data

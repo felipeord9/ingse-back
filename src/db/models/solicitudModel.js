@@ -10,7 +10,7 @@ const SolicitudSchema = {
     autoIncrement: true
   },
   cedulaPropietario: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.STRING,
     allowNull: false,
     field: 'cedula_propietario',
   },
@@ -84,7 +84,7 @@ const SolicitudSchema = {
 
   /* persona autorizada */
   cedulaPersonAuth: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.STRING,
     allowNull: false,
     field: 'cedula_persona_auth',
   },
@@ -187,7 +187,7 @@ const SolicitudSchema = {
     field: 'created_at',
     defaultValue: Sequelize.NOW
   },
-  createdBy: {
+  userId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     field: "user_id",
