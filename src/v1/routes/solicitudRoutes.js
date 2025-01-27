@@ -12,7 +12,7 @@ router
   .get("/", SolicitudController.findAllSolicitudes)
   .get("/:id", SolicitudController.findOneSolicitud)
   .post('/', SolicitudController.createSolicitud)
-  .post('/multiple', SolicitudController.createSolicitud)
+  .post('/multiple', SolicitudController.createMultipleSolicitud)
   .patch('/:id', SolicitudController.updateSolicitud)
 
 module.exports = router

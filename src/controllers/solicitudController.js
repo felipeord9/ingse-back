@@ -46,20 +46,52 @@ const createSolicitud = async (req, res, next) => {
 const createMultipleSolicitud = async (req, res, next) => {
   try {
     const { body } = req
+
+    console.log(body)
     
     /* const values = []; */
-    for (let i = body.desde; i <= body.hasta; i++) {
-      /* values.push([`${letras}${i}`]); */
-      await SolicitudService.create({
-        cedulaPropietario: body.cedulaPropietario,
-        nombrePropietario: body.nombrePropietario,
-        placa: `${letras}${i}`
-      })
+    if(body.tipo === 'MOTO'){
+      for (let i = body.desde; i <= body.hasta; i++) {
+        let numeroProcesado;
+        if(i < 10){
+          numeroProcesado = `0${i}`
+        }else{
+          numeroProcesado = `${i}`
+        }
+        await SolicitudService.create({
+          cedulaPropietario: body.cedulaPropietario,
+          nombrePropietario: body.nombrePropietario,
+          tipo: body.tipo,
+          placa: `${body.letras}${numeroProcesado}${body.letraFinal}`,
+          createdAt: body.createdAt,
+          userId: body.userId,
+        })
+      }
+    }else{
+      for (let i = body.desde; i <= body.hasta; i++) {
+        let numeroProcesado;
+        if(i >= 0 && i < 10){
+          numeroProcesado = `00${i}`
+        }else if(i >= 10 && i < 100){
+          numeroProcesado = `0${i}`
+        }else{
+          numeroProcesado = `${i}`
+        }
+        /* numeroProcesado.toString().padStart(3, '0'); */
+        /* values.push([`${letras}${i}`]); */
+        await SolicitudService.create({
+          cedulaPropietario: body.cedulaPropietario,
+          nombrePropietario: body.nombrePropietario,
+          tipo: body.tipo,
+          placa: `${body.letras}${numeroProcesado}`,
+          createdAt: body.createdAt,
+          userId: body.userId,
+        })
+      }
     }
-    
+
     res.status(201).json({
-      message: 'Created',
-      data
+      message: 'Created'
     })
   } catch (error) {
     console.log(error.message)

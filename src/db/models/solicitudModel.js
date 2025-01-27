@@ -71,6 +71,14 @@ const SolicitudSchema = {
     allowNull: true,
     field: 'placa',
   },
+  vin: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  chasis:{
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   marca: {
     type: DataTypes.STRING,
     allowNull: true,
@@ -81,11 +89,15 @@ const SolicitudSchema = {
     allowNull: true,
     field: 'tipo',
   },
+  servicio:{
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
 
   /* persona autorizada */
   cedulaPersonAuth: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
     field: 'cedula_persona_auth',
   },
   nombrePersonAuth: {
