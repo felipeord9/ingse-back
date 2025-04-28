@@ -17,6 +17,11 @@ if(config.isProd) {
 }
 
 const sequelize = new Sequelize(config.dbUrl, options)
+/* const sequelize = new Sequelize('ingse_web', 'sa', '031466Ok', {
+  host: 'localhost',    // Cambia esto si tu base de datos está en otro servidor
+  dialect: 'mysql',     // Indicamos que estamos usando MySQL
+  logging: false,       
+}); */
 
 setupModels(sequelize)
 

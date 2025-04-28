@@ -200,8 +200,8 @@ const sendRecovery = async (email) => {
                 AGRADECEMOS NOS INFORME AL RESPECTO.</p>
                <p> El contenido de este mensaje de
                 correo electrónico y todos los archivos adjuntos a éste contienen
-                información de carácter confidencial y/o uso privativo de ONCAA
-                BOX y de sus destinatarios. Si usted recibió este mensaje
+                información de carácter confidencial y/o uso privativo de INGSE S.A.S
+                y de sus destinatarios. Si usted recibió este mensaje
                 por error, por favor elimínelo y comuníquese con el remitente para
                 informarle de este hecho, absteniéndose de divulgar o hacer cualquier
                 copia de la información ahí contenida, gracias. En caso contrario

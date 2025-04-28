@@ -203,18 +203,18 @@ const SolicitudSchema = {
     type: DataTypes.INTEGER,
     allowNull: false,
     field: "user_id",
-    references: {
+    /* references: {
       model: USER_TABLE,
       key: "id",
     },
     onUpdate: "CASCADE",
-    onDelete: "SET NULL",
+    onDelete: "SET NULL", */
   },
 };
 
 class Solicitud extends Model {
   static associate(models) {
-    this.belongsTo(models.User, { as: "user" });
+    /* this.belongsTo(models.User, { as: "user" }); */
   }
 
   static config(sequelize) {
