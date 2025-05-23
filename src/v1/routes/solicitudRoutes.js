@@ -13,6 +13,7 @@ router
   .get("/:id", SolicitudController.findOneSolicitud)
   .post('/', SolicitudController.createSolicitud)
   .post('/multiple', SolicitudController.createMultipleSolicitud)
+  .post('/placas/diferentes', SolicitudController.createWithDiffPlaca)
   .patch('/:id', SolicitudController.updateSolicitud)
 
 module.exports = router

@@ -49,8 +49,7 @@ const createMultipleSolicitud = async (req, res, next) => {
 
     console.log(body)
     
-    /* const values = []; */
-    if(body.tipo === 'MOTO'){
+    /* if(body.tipo === 'MOTOCICLETAS'){
       for (let i = body.desde; i <= body.hasta; i++) {
         let numeroProcesado;
         if(i < 10){
@@ -77,8 +76,6 @@ const createMultipleSolicitud = async (req, res, next) => {
         }else{
           numeroProcesado = `${i}`
         }
-        /* numeroProcesado.toString().padStart(3, '0'); */
-        /* values.push([`${letras}${i}`]); */
         await SolicitudService.create({
           cedulaPropietario: body.cedulaPropietario,
           nombrePropietario: body.nombrePropietario,
@@ -88,10 +85,158 @@ const createMultipleSolicitud = async (req, res, next) => {
           userId: body.userId,
         })
       }
+    } */
+  
+    if(body.tipo === 'MOTOCICLETAS'){
+      if(body.letrasDesde === body.letrasHasta){
+        for (let i = body.desde; i <= body.hasta; i++) {
+          let numeroProcesado;
+          if(i < 10){
+            numeroProcesado = `0${i}`
+          }else{
+            numeroProcesado = `${i}`
+          }
+          await SolicitudService.create({
+            cedulaPropietario: body.cedulaPropietario,
+            nombrePropietario: body.nombrePropietario,
+            tipo: body.tipo,
+            placa: `${body.letrasDesde}${numeroProcesado}${body.letraFinal}`,
+            createdAt: body.createdAt,
+            userId: body.userId,
+          })
+        }
+      }else{
+        const abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const preInicio = body.letrasDesde.slice(0, 2); // primeras 2 letras de la constante desde
+        const letraInicio = body.letrasDesde[2]; // tercer caracter de las letras desde
+        const letraFin = body.letrasHasta[2]; // tercer caracter de las letras hasta
+
+        const iStart = abc.indexOf(letraInicio);
+        const iEnd = abc.indexOf(letraFin);
+
+        for (let i = iStart; i <= iEnd; i++) {
+          const letraActual = abc[i];
+          let numStart = 1;
+          let numEnd = 99;
+      
+          if (i === iStart) numStart = body.desde;
+          if (i === iEnd) numEnd = body.hasta;
+          for (let num = numStart; num <= numEnd; num++) {
+            let numero = num.toString().padStart(2, '0');
+            await SolicitudService.create({
+              cedulaPropietario: body.cedulaPropietario,
+              nombrePropietario: body.nombrePropietario,
+              tipo: body.tipo,
+              placa: `${preInicio}${letraActual}${numero}${body.letraFinal}`,
+              createdAt: body.createdAt,
+              userId: body.userId,
+            })
+          }
+        }
+      }
+    }else{
+      if(body.letrasDesde === body.letrasHasta){
+        for (let i = body.desde; i <= body.hasta; i++) {
+          let numeroProcesado;
+          if(i >= 0 && i < 10){
+            numeroProcesado = `00${i}`
+          }else if(i >= 10 && i < 100){
+            numeroProcesado = `0${i}`
+          }else{
+            numeroProcesado = `${i}`
+          }
+          if(body.tipo === 'MOTOCARRO'){
+            await SolicitudService.create({
+              cedulaPropietario: body.cedulaPropietario,
+              nombrePropietario: body.nombrePropietario,
+              tipo: body.tipo,
+              placa: `${numeroProcesado}${body.letrasDesde}`,
+              createdAt: body.createdAt,
+              userId: body.userId,
+            })
+          }else{
+            await SolicitudService.create({
+              cedulaPropietario: body.cedulaPropietario,
+              nombrePropietario: body.nombrePropietario,
+              tipo: body.tipo,
+              placa: `${body.letrasDesde}${numeroProcesado}`,
+              createdAt: body.createdAt,
+              userId: body.userId,
+            })
+          }
+        }
+      }else{
+        const abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const preInicio = body.letrasDesde.slice(0, 2); // primeras 2 letras de la constante desde
+        const letraInicio = body.letrasDesde[2]; // tercer caracter de las letras desde
+        const letraFin = body.letrasHasta[2]; // tercer caracter de las letras hasta
+
+        const iStart = abc.indexOf(letraInicio);
+        const iEnd = abc.indexOf(letraFin);
+
+        for (let i = iStart; i <= iEnd; i++) {
+          const letraActual = abc[i];
+          let numStart = 1;
+          let numEnd = 999;
+      
+          if (i === iStart) numStart = body.desde;
+          if (i === iEnd) numEnd = body.hasta;
+          for (let num = numStart; num <= numEnd; num++) {
+            let numero = num.toString().padStart(3, '0');
+            if(body.tipo === 'MOTOCARRO'){
+              await SolicitudService.create({
+                cedulaPropietario: body.cedulaPropietario,
+                nombrePropietario: body.nombrePropietario,
+                tipo: body.tipo,
+                placa: `${numero}${preInicio}${letraActual}`,
+                createdAt: body.createdAt,
+                userId: body.userId,
+              })
+            }else{
+              await SolicitudService.create({
+                cedulaPropietario: body.cedulaPropietario,
+                nombrePropietario: body.nombrePropietario,
+                tipo: body.tipo,
+                placa: `${preInicio}${letraActual}${numero}`,
+                createdAt: body.createdAt,
+                userId: body.userId,
+              })
+            }
+          }
+      }
+      }
+    }
+    res.status(201).json({
+      message: 'Created'
+    })
+  } catch (error) {
+    console.log(error.message)
+    next(error)
+  }
+}
+
+const createWithDiffPlaca = async (req, res, next) => {
+  try {
+    const { body } = req
+
+    console.log(body)
+    
+    for(let placa of body.placas.agregados) {
+      await SolicitudService.addItem({
+        cedulaPropietario: placa.cedulaPropietario,
+        nombrePropietario: placa.nombrePropietario,
+        celularPropietario: placa.celularPropietario,
+        correoPropietario: placa.correoPropietario,
+        placa: placa.placa,
+        tipo: placa.tipo,
+        observations: placa.observations,
+        createdAt: placa.createdAt,
+        userId: placa.userId,
+      })
     }
 
     res.status(201).json({
-      message: 'Created'
+      message: 'Created',
     })
   } catch (error) {
     console.log(error.message)
@@ -118,5 +263,6 @@ module.exports = {
   findOneSolicitud,
   createSolicitud,
   createMultipleSolicitud,
+  createWithDiffPlaca,
   updateSolicitud,
 };

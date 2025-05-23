@@ -9,9 +9,31 @@ const SolicitudSchema = {
     primaryKey: true,
     autoIncrement: true
   },
+  /* datos basicos de la solicitud */
+  numeroFactura:{
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    field: 'numero_factura',
+  },
+  concepto:{
+    type: DataTypes.STRING,
+    allowNull: true,
+    field: 'concepto_solicitud',
+  },
+  numPlacas:{
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    field: 'numero_placas',
+  },
+  typeClient:{
+    type: DataTypes.STRING,
+    allowNull: true,
+    field: 'tipo_cliente',
+  },
+  /* datos del propietario */
   cedulaPropietario: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
     field: 'cedula_propietario',
   },
   nombrePropietario: {
@@ -78,6 +100,11 @@ const SolicitudSchema = {
   chasis:{
     type: DataTypes.STRING,
     allowNull: true,
+  },
+  ciudadPlaca:{
+    type: DataTypes.STRING,
+    allowNull: true,
+    field: 'ciudad_placa',
   },
   marca: {
     type: DataTypes.STRING,
@@ -185,14 +212,28 @@ const SolicitudSchema = {
   firma: {
     type: DataTypes.TEXT,
     allowNull: true,
-    field: 'firma',
+    field: 'firma_cliente',
   },
   huella: {
     type: DataTypes.TEXT,
     allowNull: true,
     field: 'huella',
   },
-
+  firmaEmpleado:{
+    type: DataTypes.TEXT,
+    allowNull: true,
+    field: 'firma_empleado',
+  },
+  impronta:{
+    type: DataTypes.TEXT,
+    allowNull: true,
+    field: 'impronto',
+  },
+  productoDañado:{
+    type: DataTypes.TEXT,
+    allowNull: true,
+    field: 'producto_dañado',
+  },
   createdAt: {
     type: DataTypes.DATE,
     allowNull: false,
@@ -209,6 +250,10 @@ const SolicitudSchema = {
     },
     onUpdate: "CASCADE",
     onDelete: "SET NULL", */
+  },
+  observations: {
+    type: DataTypes.TEXT,
+    allowNull: true
   },
 };
 
