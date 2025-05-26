@@ -87,7 +87,7 @@ const createMultipleSolicitud = async (req, res, next) => {
       }
     } */
   
-    if(body.tipo === 'MOTOCICLETAS'){
+    /* if(body.tipo === 'MOTOCICLETAS'){
       if(body.letrasDesde === body.letrasHasta){
         for (let i = body.desde; i <= body.hasta; i++) {
           let numeroProcesado;
@@ -205,8 +205,130 @@ const createMultipleSolicitud = async (req, res, next) => {
           }
       }
       }
-    }
-    res.status(201).json({
+    } */
+    
+      if(body.tipo === 'MOTOCICLETAS'){
+        const placas = [];
+        if(body.letrasDesde === body.letrasHasta){
+          for (let i = body.desde; i <= body.hasta; i++) {
+            let numeroProcesado;
+            if(i < 10){
+              numeroProcesado = `0${i}`
+            }else{
+              numeroProcesado = `${i}`
+            }
+            const placa = `${body.letrasDesde}${numeroProcesado}${body.letraFinal}`;
+            placas.push(placa)
+          }
+        }else{
+          const abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+          const preInicio = body.letrasDesde.slice(0, 2); // primeras 2 letras de la constante desde
+          const letraInicio = body.letrasDesde[2]; // tercer caracter de las letras desde
+          const letraFin = body.letrasHasta[2]; // tercer caracter de las letras hasta
+  
+          const iStart = abc.indexOf(letraInicio);
+          const iEnd = abc.indexOf(letraFin);
+  
+          for (let i = iStart; i <= iEnd; i++) {
+            const letraActual = abc[i];
+            let numStart = 0;
+            let numEnd = 99;
+        
+            if (i === iStart) numStart = body.desde;
+            if (i === iEnd) numEnd = body.hasta;
+            for (let num = numStart; num <= numEnd; num++) {
+              let numero = num.toString().padStart(2, '0');
+              const placa = `${preInicio}${letraActual}${numero}${body.letraFinal}`;
+              placas.push(placa)
+            }
+          }
+        }
+        // Ahora creamos una sola instancia con la primera, última y cantidad
+        const placaInicial = placas[0];
+        const placaFinal = placas[placas.length - 1];
+        const cantidad = body.concepto === 'NUEVA' ? placas.length * 2 : placas.length;
+
+        await SolicitudService.create({
+          cedulaPropietario: body.cedulaPropietario,
+          nombrePropietario: body.nombrePropietario,
+          tipo: body.tipo,
+          servicio: body.servicio,
+          concepto: body.concepto,
+          placaDesde: placaInicial,
+          placaHasta: placaFinal,
+          numPlacas: cantidad,
+          createdAt: body.createdAt,
+          userId: body.userId,
+        })
+
+      }else{
+        const placas = [];
+        if(body.letrasDesde === body.letrasHasta){
+          for (let i = body.desde; i <= body.hasta; i++) {
+            let numeroProcesado;
+            if(i >= 0 && i < 10){
+              numeroProcesado = `00${i}`
+            }else if(i >= 10 && i < 100){
+              numeroProcesado = `0${i}`
+            }else{
+              numeroProcesado = `${i}`
+            }
+            if(body.tipo === 'MOTOCARRO'){
+              const placa = `${numeroProcesado}${body.letrasDesde}`;
+              placas.push(placa)
+            }else{
+              const placa = `${body.letrasDesde}${numeroProcesado}`;
+              placas.push(placa)
+            }
+          }
+        }else{
+          const abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+          const preInicio = body.letrasDesde.slice(0, 2); // primeras 2 letras de la constante desde
+          const letraInicio = body.letrasDesde[2]; // tercer caracter de las letras desde
+          const letraFin = body.letrasHasta[2]; // tercer caracter de las letras hasta
+  
+          const iStart = abc.indexOf(letraInicio);
+          const iEnd = abc.indexOf(letraFin);
+  
+          for (let i = iStart; i <= iEnd; i++) {
+            const letraActual = abc[i];
+            let numStart = 0;
+            let numEnd = 999;
+        
+            if (i === iStart) numStart = body.desde;
+            if (i === iEnd) numEnd = body.hasta;
+            for (let num = numStart; num <= numEnd; num++) {
+              let numero = num.toString().padStart(3, '0');
+              if(body.tipo === 'MOTOCARRO'){
+                const placa = `${numero}${preInicio}${letraActual}`;
+                placas.push(placa)
+              }else{
+                const placa = `${preInicio}${letraActual}${numero}`;
+                placas.push(placa)
+              }
+            }
+        }
+        }
+
+        // Ahora creamos una sola instancia con la primera, última y cantidad
+        const placaInicial = placas[0];
+        const placaFinal = placas[placas.length - 1];
+        const cantidad = body.concepto === 'NUEVA' ? placas.length * 2 : placas.length;
+
+        await SolicitudService.create({
+          cedulaPropietario: body.cedulaPropietario,
+          nombrePropietario: body.nombrePropietario,
+          tipo: body.tipo,
+          servicio: body.servicio,
+          concepto: body.concepto,
+          placaDesde: placaInicial,
+          placaHasta: placaFinal,
+          numPlacas: cantidad,
+          createdAt: body.createdAt,
+          userId: body.userId,
+        })
+      }
+      res.status(201).json({
       message: 'Created'
     })
   } catch (error) {
@@ -219,7 +341,7 @@ const createWithDiffPlaca = async (req, res, next) => {
   try {
     const { body } = req
 
-    console.log(body)
+    console.log(JSON.stringify(body))
     
     for(let placa of body.placas.agregados) {
       await SolicitudService.addItem({
@@ -227,7 +349,10 @@ const createWithDiffPlaca = async (req, res, next) => {
         nombrePropietario: placa.nombrePropietario,
         celularPropietario: placa.celularPropietario,
         correoPropietario: placa.correoPropietario,
-        placa: placa.placa,
+        concepto: placa.concepto,
+        servicio: placa.servicio,
+        placaDesde: placa.placaDesde,
+        numPlacas: placa.numPlacas,
         tipo: placa.tipo,
         observations: placa.observations,
         createdAt: placa.createdAt,

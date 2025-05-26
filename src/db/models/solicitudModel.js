@@ -88,11 +88,21 @@ const SolicitudSchema = {
     allowNull: true,
     field: 'licencia_transito',
   },
-  placa: {
+  placaDesde: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    field: 'placa_desde',
+  },
+  placaHasta: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    field: 'placa_hasta',
+  },
+  /* placa: {
     type: DataTypes.STRING,
     allowNull: true,
     field: 'placa',
-  },
+  }, */
   vin: {
     type: DataTypes.STRING,
     allowNull: true,
