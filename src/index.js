@@ -17,7 +17,7 @@ const app = express();
 }  */
 
 // Configuraciones de la aplicación
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '50mb'}));
 app.use(cors())
 app.use(morgan("dev"))
 //app.use(cors(corsOptions));
