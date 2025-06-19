@@ -257,6 +257,7 @@ const createMultipleSolicitud = async (req, res, next) => {
           placaDesde: placaInicial,
           placaHasta: placaFinal,
           numPlacas: cantidad,
+          ciudadPlaca: body.ciudadPlaca,
           createdAt: body.createdAt,
           userId: body.userId,
         })
@@ -313,7 +314,7 @@ const createMultipleSolicitud = async (req, res, next) => {
         // Ahora creamos una sola instancia con la primera, última y cantidad
         const placaInicial = placas[0];
         const placaFinal = placas[placas.length - 1];
-        const cantidad = body.concepto === 'NUEVA' ? placas.length * 2 : placas.length;
+        const cantidad = (body.concepto === 'NUEVA' && body.tipo !== 'MOTOCARRO') ? placas.length * 2 : placas.length;
 
         await SolicitudService.create({
           cedulaPropietario: body.cedulaPropietario,
@@ -324,6 +325,7 @@ const createMultipleSolicitud = async (req, res, next) => {
           placaDesde: placaInicial,
           placaHasta: placaFinal,
           numPlacas: cantidad,
+          ciudadPlaca: body.ciudadPlaca,
           createdAt: body.createdAt,
           userId: body.userId,
         })
